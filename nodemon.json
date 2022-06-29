@@ -1,0 +1,7 @@
+{
+  "ignore": ["public/*"],
+  "execMap": {
+    "js": "babel-node",
+    "ts tsx": "ts-node"
+  }
+}
