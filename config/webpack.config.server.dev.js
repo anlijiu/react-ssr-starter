@@ -3,6 +3,7 @@ require('dotenv').config();
 const fs = require('fs');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
 
@@ -87,6 +88,12 @@ const config = {
   },
   module: {
     rules: [
+      {
+        enforce: 'pre',
+        exclude: /@babel(?:\/|\\{1,2})runtime/,
+        test: /\.(js|mjs|jsx|ts|tsx|css)$/,
+        loader: require.resolve('source-map-loader'),
+      },
       /**
        * svg CRA reference:
        * https://github.com/facebook/create-react-app/blob/v5.0.1/packages/react-scripts/config/webpack.config.js#L389
@@ -139,10 +146,57 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          'isomorphic-style-loader',
+          /*TODO 搞清楚server 是否需要和client保持一致 *.css和 *.module.css的处理方式不一样*/
           {
             loader: 'css-loader',
+            options: {
+              // CSS Loader https://github.com/webpack/css-loader
+              // css-loader前面有几个loader , 默认0
+              importLoaders: 1,
+              sourceMap: true,
+              import: {
+                filter: (url, media, resourcePath) => {
+                  // console.log("webpack.config.babel.js import  resourcePath:", resourcePath)
+                  // resourcePath - path to css file
+
+                  // Don't handle `style.css` import
+                  if (url.includes("style.css")) {
+                    return false;
+                  }
+
+                  return false;
+                }
+              },
+              esModule: true,
+              // CSS Modules https://github.com/css-modules/css-modules
+              modules:  {
+                mode: (resourcePath) => {
+                  // console.log("webpack.config.babel.js mode resourcePath:", resourcePath)
+
+                  if (/pure.css$/i.test(resourcePath)) {
+                    return "pure";
+                  }
+
+                  if (/global.css$/i.test(resourcePath)) {
+                    return "global";
+                  }
+
+                  return "local";
+                },
+                auto: (resourcePath) => {
+                  // console.log("webpack.config.babel.js auto resourcePath:", resourcePath)
+                  return true;
+                },
+                exportGlobals: false,
+                localIdentName: isProd('[contenthash:base64:5]', '[path][name]__[local]--[contenthash:base64:5]'),
+                localIdentContext: resolveCwd('./src'),
+                namedExport: true,
+                exportLocalsConvention: "camelCaseOnly",
+                exportOnlyLocals: false,
+              },
+            },
           },
+          'postcss-loader'
         ],
       },
       {

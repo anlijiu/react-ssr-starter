@@ -3,6 +3,8 @@ require('dotenv').config();
 const fs = require('fs');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 // const nodeExternals = require('webpack-node-externals');
 const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
@@ -150,11 +152,68 @@ const config = {
       },
       {
         test: /\.css$/,
+        include: /\.module\.css$/,
         use: [
-          'isomorphic-style-loader',
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
+            options: {
+              // CSS Loader https://github.com/webpack/css-loader
+              // css-loader前面有几个loader , 默认0
+              importLoaders: 0,
+              sourceMap: true,
+              import: {
+                filter: (url, media, resourcePath) => {
+                  // console.log("webpack.config.babel.js import  resourcePath:", resourcePath)
+                  // resourcePath - path to css file
+
+                  // Don't handle `style.css` import
+                  if (url.includes("style.css")) {
+                    return false;
+                  }
+
+                  return false;
+                }
+              },
+              esModule: true,
+              // CSS Modules https://github.com/css-modules/css-modules
+              modules:  {
+                mode: (resourcePath) => {
+                  // console.log("webpack.config.babel.js mode resourcePath:", resourcePath)
+
+                  if (/pure.css$/i.test(resourcePath)) {
+                    return "pure";
+                  }
+
+                  if (/global.css$/i.test(resourcePath)) {
+                    return "global";
+                  }
+
+                  return "local";
+                },
+                auto: (resourcePath) => {
+                  // console.log("webpack.config.babel.js auto resourcePath:", resourcePath)
+                  return true;
+                },
+                exportGlobals: false,
+                localIdentName: isProd('[contenthash:base64:5]', '[path][name]__[local]--[contenthash:base64:5]'),
+                localIdentContext: resolveCwd('./src'),
+                namedExport: true,
+                exportLocalsConvention: "camelCaseOnly",
+                exportOnlyLocals: false,
+              },
+            },
           },
+          'postcss-loader'
+        ],
+      },
+      {
+        test: /\.css$/,
+        exclude: /\.module\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "postcss-loader"
         ],
       },
       {
@@ -164,6 +223,10 @@ const config = {
     ],
   },
   plugins: [
+      new MiniCssExtractPlugin({
+        filename: '[name].css',
+        chunkFilename: '[id].css',
+      }),
       new HtmlWebpackPlugin({
           ...htmlWebpackPluginOptions ,
           inject: true,
