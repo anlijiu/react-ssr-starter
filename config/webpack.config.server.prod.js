@@ -8,7 +8,7 @@ const { StatsWriterPlugin } = require("webpack-stats-plugin")
 const MiniCssExtractPlugin = require('./mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const CopyPlugin = require("copy-webpack-plugin");
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const { resolveCwd, resolveDir, pcwd } = require('./util/path');
 const { log } = require('./util/log');
@@ -254,11 +254,7 @@ const config = {
         inject: true,
         template: resolveCwd('./public/index.html'),
     }),
-    // new CopyPlugin({
-    //   patterns: [
-    //     { from: "public", to: "public" },
-    //   ],
-    // }),
+    // new BundleAnalyzerPlugin({analyzerPort: 8999}),
   ],
 };
 

@@ -9,6 +9,7 @@
     "build:client:dev": "rimraf dist/client-dev && NODE_ENV=development webpack --config ./config/webpack.config.client.dev.js",
     "build:client:prod": "rimraf dist/client-prod && NODE_ENV=production webpack --config ./config/webpack.config.client.prod.js",
     "build:server:prod": "rimraf dist/server-prod && NODE_ENV=production webpack --config ./config/webpack.config.server.prod.js",
+    "build:prod": "run-p build:*:prod",
     "start:dev": "NODE_ENV=development webpack --config ./config/webpack.config.server.dev.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -80,6 +81,7 @@
     "typescript": "^4.7.4",
     "url-loader": "^4.1.1",
     "webpack": "^5.73.0",
+    "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-middleware": "^5.3.3",
     "webpack-hot-middleware": "^2.25.1",

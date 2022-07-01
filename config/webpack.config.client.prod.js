@@ -8,6 +8,7 @@ const { StatsWriterPlugin } = require("webpack-stats-plugin")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const { resolveCwd, resolveDir, pcwd } = require('./util/path');
 const { log } = require('./util/log');
@@ -251,6 +252,8 @@ const config = {
             { from: "public", to: "public" },
         ],
     }),
+    /* 不定时打开分析一下大小 */
+    // new BundleAnalyzerPlugin({analyzerPort: 8998}),
   ],
 };
 

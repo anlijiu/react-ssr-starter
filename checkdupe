@@ -1,3 +1,4 @@
+# from https://formidable.com/blog/2018/finding-webpack-duplicates-with-inspectpack-plugin/
 # npm install -g inspectpack 
 # 需要 webpack-stats-plugin 生成 webpack build过程中的 各种stats信息
 
