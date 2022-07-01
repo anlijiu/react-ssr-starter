@@ -37,4 +37,5 @@ function staticLoader(app, options) {
   return app;
 }
 
-export default staticLoader;
+module.exports = staticLoader;
+// export default staticLoader;

@@ -147,6 +147,7 @@ const config = {
         test: /\.css$/,
         use: [
           /*TODO 搞清楚server 是否需要和client保持一致 *.css和 *.module.css的处理方式不一样*/
+          'isomorphic-style-loader',
           {
             loader: 'css-loader',
             options: {

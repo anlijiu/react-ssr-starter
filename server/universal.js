@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 // const stringRenderer = require('./renderer/string-renderer').default;
-const pipeStreamRenderer = require('./renderer/pipe-stream-renderer').default;
+const pipeStreamRenderer = require('./renderer/pipe-stream-renderer');
 
 const serviceName = process.env.SERVICE_NAME || 'localhost';
 const clientPort = process.env.CLIENT_PORT || 3001;
@@ -86,4 +86,5 @@ function processRequest(req, res, htmlData, options) {
   handleRender(req, res, data, htmlData, options);
 }
 
-export default createUniversalMiddleware;
+module.exports = createUniversalMiddleware;
+// export default createUniversalMiddleware;

@@ -135,8 +135,10 @@ const config = {
       },
       {
         test: /\.css$/,
+        include: /\.module\.css$/,
         use: [
-          'isomorphic-style-loader',
+          MiniCssExtractPlugin.loader,
+          // 'isomorphic-style-loader',
           {
             loader: 'css-loader',
             options: {
@@ -187,6 +189,15 @@ const config = {
             },
           },
           'postcss-loader'
+        ],
+      },
+      {
+        test: /\.css$/,
+        exclude: /\.module\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "postcss-loader"
         ],
       },
       {

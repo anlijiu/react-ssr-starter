@@ -1,4 +1,4 @@
-import { renderToPipeableStream } from 'react-dom/server';
+const { renderToPipeableStream } = require('react-dom/server');
 
 /**
  * Reference:
@@ -10,7 +10,7 @@ import { renderToPipeableStream } from 'react-dom/server';
  * @param {any} options
  */
 
-export default function pipeStreamRenderer(
+function pipeStreamRenderer(
   req,
   res,
   reactEl,
@@ -78,3 +78,5 @@ export default function pipeStreamRenderer(
     res.send(500);
   }
 }
+
+module.exports = pipeStreamRenderer;

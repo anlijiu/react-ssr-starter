@@ -1,7 +1,7 @@
 // module.exports = universalLoader;
-import createUniversalMiddleware from './universal'
-import stringRenderer from './renderer/string-renderer'
-import streamRenderer from './renderer/stream-renderer'
+const createUniversalMiddleware =  require('./universal')
+const stringRenderer = require('./renderer/string-renderer')
+const streamRenderer = require('./renderer/stream-renderer')
 
 function universalLoader(app, options) {
   const universalMiddleware = createUniversalMiddleware(options);
@@ -9,5 +9,9 @@ function universalLoader(app, options) {
   return app;
 }
 
-export default universalLoader;
-export { stringRenderer, streamRenderer };
+module.exports = universalLoader;
+universalLoader.stringRenderer = stringRenderer;
+universalLoader.streamRenderer = streamRenderer;
+
+// export default universalLoader;
+// export { stringRenderer, streamRenderer };

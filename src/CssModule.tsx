@@ -1,5 +1,6 @@
 // import s from './CssModule.module.css';
 import { test as s_test } from './CssModule.module.css';
+// import s_test from './CssModule.module.css';
 
 const CssModule = () => {
   return (

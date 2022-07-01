@@ -33,9 +33,10 @@ const hotMiddleware = webpackHotMiddleware(compiler, {
 const React = require('react');
 
 const { default: App } = require('../src/App.tsx');
+const { default: StyledApp } = require('./StyledApp.jsx');
 const clientBuildPath = path.resolve(__dirname, 'public');
 
-let AppEl = App;
+let AppEl = StyledApp;
 
 const express = require('express');
 import staticLoader from './static-loader';
@@ -65,8 +66,8 @@ async function start() {
     });
 
     if (module.hot) {
-        module.hot.accept('../src/App', () => {
-            const { default: App } = require('../src/App');
+        module.hot.accept('./StyledApp.jsx', () => {
+            const { default : App } = require('./StyledApp.jsx');
             AppEl = App;
             console.log('✅ Server hot reloaded App');
         });
