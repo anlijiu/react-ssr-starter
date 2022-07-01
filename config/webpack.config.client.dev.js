@@ -86,7 +86,7 @@ const config = {
   output: {
     path: resolveCwd('./dist/client-dev'),
     publicPath: '',
-    filename: 'bundle.js',
+    filename: 'bundle-[id].js',
     hotUpdateChunkFilename: '.hot/[id].[hash].hot-update.js',
     hotUpdateMainFilename: '.hot/[hash].hot-update.json',
     chunkFilename: '[id].chunk.js',

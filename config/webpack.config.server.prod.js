@@ -3,6 +3,7 @@ require('dotenv').config();
 const fs = require('fs');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
+const { StatsWriterPlugin } = require("webpack-stats-plugin")
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MiniCssExtractPlugin = require('./mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -82,8 +83,7 @@ const config = {
     ],
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
   },
-  // mode: 'production',
-  mode: 'development',
+  mode: 'production',
   entry: './server/prod-index.js',
   output: {
     path: resolveCwd('./dist/server-prod'),
@@ -238,6 +238,13 @@ const config = {
     ],
   },
   plugins: [
+    new StatsWriterPlugin({
+      fields: ["assets", "modules"],
+      stats: {
+        source: true // Needed for webpack5+
+      },
+      filename: "stats.json" // Default
+    }),
     new MiniCssExtractPlugin({
       filename:  isProd('[name]-[contenthash].css', '[name].css'),
       chunkFilename: isProd('[id]-[contenthash].css', '[id].css'),
@@ -247,11 +254,11 @@ const config = {
         inject: true,
         template: resolveCwd('./public/index.html'),
     }),
-    new CopyPlugin({
-      patterns: [
-        { from: "public", to: "public" },
-      ],
-    }),
+    // new CopyPlugin({
+    //   patterns: [
+    //     { from: "public", to: "public" },
+    //   ],
+    // }),
   ],
 };
 

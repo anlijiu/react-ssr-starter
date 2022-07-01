@@ -1,0 +1,9 @@
+# npm install -g inspectpack 
+# 需要 webpack-stats-plugin 生成 webpack build过程中的 各种stats信息
+
+printf 'inspectpack -s dist/server-prod/stats.json -a versions\n'
+inspectpack -s dist/server-prod/stats.json -a versions
+
+
+printf '\n\ninspectpack -s dist/client-prod/stats.json -a versions\n'
+inspectpack -s dist/client-prod/stats.json -a versions

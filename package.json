@@ -6,9 +6,9 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "build": "run-s build:*",
-    "build:client:dev": "NODE_ENV=development webpack --config ./config/webpack.config.client.dev.js",
-    "build:client:prod": "NODE_ENV=production webpack --config ./config/webpack.config.client.prod.js",
-    "build:server:prod": "NODE_ENV=production webpack --config ./config/webpack.config.server.prod.js",
+    "build:client:dev": "rimraf dist/client-dev && NODE_ENV=development webpack --config ./config/webpack.config.client.dev.js",
+    "build:client:prod": "rimraf dist/client-prod && NODE_ENV=production webpack --config ./config/webpack.config.client.prod.js",
+    "build:server:prod": "rimraf dist/server-prod && NODE_ENV=production webpack --config ./config/webpack.config.server.prod.js",
     "start:dev": "NODE_ENV=development webpack --config ./config/webpack.config.server.dev.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -73,6 +73,7 @@
     "postcss-selector-not": "^6.0.0",
     "postcss-simple-vars": "^6.0.3",
     "postcss-url": "^10.1.3",
+    "rimraf": "^3.0.2",
     "source-map-loader": "^4.0.0",
     "style-loader": "^3.3.1",
     "ts-node": "^10.8.1",
@@ -82,7 +83,8 @@
     "webpack-cli": "^4.10.0",
     "webpack-dev-middleware": "^5.3.3",
     "webpack-hot-middleware": "^2.25.1",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "webpack-stats-plugin": "^1.0.3"
   },
   "browserslist": [
     "last 1 version",

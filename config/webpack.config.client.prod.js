@@ -4,6 +4,10 @@ const fs = require('fs');
 const webpack = require('webpack');
 const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { StatsWriterPlugin } = require("webpack-stats-plugin")
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 
 const { resolveCwd, resolveDir, pcwd } = require('./util/path');
 const { log } = require('./util/log');
@@ -23,6 +27,19 @@ function loadConfigOnBase(fileName) {
   }
   return defaultConfig;
 }
+
+const htmlWebpackPluginOptions = {
+	title: `React Application`,
+	inject: true,
+	hash: false,
+	cache: true,
+	showErrors: true,
+	minify: {
+		minifyCSS: false,
+		minifyJS: false,
+	},
+}
+
 
 log(`NODE_ENV is "${process.env.NODE_ENV}"`);
 
@@ -66,7 +83,7 @@ const config = {
     ],
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
   },
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode: 'production',
   entry: './src/index.tsx',
   output: {
     publicPath: '',
@@ -75,6 +92,11 @@ const config = {
     hotUpdateChunkFilename: '.hot/[id].[hash].hot-update.js',
     hotUpdateMainFilename: '.hot/[hash].hot-update.json',
     chunkFilename: '[id].[hash].chunk.js'
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+    sideEffects: true,
   },
   target: 'web',
   externalsPresets: { node: true }, // in order to ignore built-in modules like path, fs, etc.
@@ -207,10 +229,28 @@ const config = {
     ],
   },
   plugins: [
-      new MiniCssExtractPlugin({
-        filename:  isProd('[name]-[contenthash].css', '[name].css'),
-        chunkFilename: isProd('[id]-[contenthash].css', '[id].css'),
-      }),
+    new StatsWriterPlugin({
+      fields: ["assets", "modules"],
+      stats: {
+        source: true // Needed for webpack5+
+      },
+      filename: "stats.json" // Default
+    }),
+    new MiniCssExtractPlugin({
+      filename:  isProd('[name]-[contenthash].css', '[name].css'),
+      chunkFilename: isProd('[id]-[contenthash].css', '[id].css'),
+    }),
+ 
+    new HtmlWebpackPlugin({
+        ...htmlWebpackPluginOptions ,
+        inject: true,
+        template: resolveCwd('./public/index.html'),
+    }),
+    new CopyPlugin({
+        patterns: [
+            { from: "public", to: "public" },
+        ],
+    }),
   ],
 };
 
